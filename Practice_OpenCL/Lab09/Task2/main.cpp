@@ -21,5 +21,37 @@ Clock;
 
 int main(){
 
-    
+    //define the device
+    Device device(select_device_with_most_flops(), "kernels.cl");
+
+    //define memory overall and size
+    const int N = 1024;
+
+    Memory<float> A(device, N);
+    Memory<float> B(device, N);
+    Memory<float> sum(device, N);
+
+    for(int i = 0; i<N; i++){
+        A[i] = 1.0f;
+        B[i] = 2.0f;
+        sum[i] = 0.0f;
+    }
+
+    Kernel dot_product(device, N, "dot_product", A, B, sum);
+
+    //transfer to kernel
+    A.write_to_device();
+    B.write_to_device();
+    sum.write_to_device();
+    //run kernel
+
+    dot_product.run();
+    //read from kernel
+    sum.read_from_device();
+    //print
+    float actual_sum = 0;
+    for(int i = 0; i<N; i++){
+        actual_sum += sum[i];
+    }
+    print_info("Actual Sum is "+to_string(actual_sum));
 }
