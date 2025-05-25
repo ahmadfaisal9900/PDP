@@ -68,7 +68,7 @@ int main(int argc, char ** argv){
 
         MPI_Recv(&istart, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        MPI_Recv(&iend, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&iend, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         float local_sum = 0.0f;
         for(int i = istart; i<iend; i++){
             local_sum += A[i] * B[i];
