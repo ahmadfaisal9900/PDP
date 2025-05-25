@@ -21,5 +21,27 @@ struct msClock
 Clock;
 
 int main(){
+    Device device(select_device_with_most_flops(), "kernels.cl");
     
+    const int N = 1024;
+    Memory<float>A(device, N*N);
+    Memory<float>B(device, N*N);
+    Memory<float>C(device, N*N);
+
+    for(int i = 0; i<N*N; i++){
+        A[i] = 1.0f;
+        B[i] = 2.0f;
+        C[i] = 0.0f;
+    }
+
+    A.write_to_device();
+    B.write_to_device();
+
+    Kernel MatMul(device, N, "matmul", A, B, C, N);
+
+    MatMul.run();
+
+    C.read_from_device();
+
+    print_info("The first element of C is "+to_string(C[0]));
 }

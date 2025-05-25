@@ -3,7 +3,7 @@
 #endif
 #define TYPE float
 
-kernel void matmul(global TYPE * A, global TYPE * B, global TYPE * C, global TYPE * sum, int N){
+kernel void matmul(global TYPE * A, global TYPE * B, global TYPE * C, int N){
     int row = get_global_id(0);
     int col = get_global_id(1);
 
